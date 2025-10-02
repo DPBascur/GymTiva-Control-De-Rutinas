@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.14",
+    "@types/mongoose": "^5.11.96",
     "@types/node": "^24.6.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
@@ -15,6 +16,7 @@
     "functions-have-names": "^1.2.3",
     "globals": "^14.0.0",
     "is-bigint": "^1.1.0",
+    "mongoose": "^8.18.3",
     "next": "^15.5.4",
     "queue-microtask": "^1.2.3",
     "react": "^19.2.0",
