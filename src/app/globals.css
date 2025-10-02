@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* GymTiva Color Palette - Modo Claro */
+    /* Colores Principales */
+    --gym-purple: 147 51 234; /* #9333EA */
+    --gym-pink: 236 72 153; /* #EC4899 */
+    --gym-cyan: 34 211 238; /* #22D3EE */
+    --gym-lime: 132 204 22; /* #84CC16 */
+    
+    /* Fondos */
+    --gym-black: 0 0 0; /* #000000 */
+    --gym-gray-dark: 31 41 55; /* #1F2937 */
+    --gym-gray-card: 31 41 55; /* #1F2937 */
+    
+    /* Texto */
+    --gym-white: 255 255 255; /* #FFFFFF */
+    --gym-gray-light: 156 163 175; /* #9CA3AF */
+    --gym-gray-medium: 107 114 128; /* #6B7280 */
+    
+    /* Variables del sistema adaptadas a GymTiva */
+    --background: var(--gym-white);
+    --foreground: var(--gym-gray-dark);
+    --card: var(--gym-white);
+    --card-foreground: var(--gym-gray-dark);
+    --popover: var(--gym-white);
+    --popover-foreground: var(--gym-gray-dark);
+    --primary: var(--gym-purple);
+    --primary-foreground: var(--gym-white);
+    --secondary: var(--gym-gray-light);
+    --secondary-foreground: var(--gym-gray-dark);
+    --muted: var(--gym-gray-light);
+    --muted-foreground: var(--gym-gray-medium);
+    --accent: var(--gym-cyan);
+    --accent-foreground: var(--gym-gray-dark);
+    --destructive: 239 68 68; /* Red */
+    --destructive-foreground: var(--gym-white);
+    --border: var(--gym-gray-light);
+    --input: var(--gym-gray-light);
+    --ring: var(--gym-purple);
+    --radius: 0.75rem;
+    
+    /* Gradientes personalizados */
+    --gym-gradient-primary: linear-gradient(to right, rgb(var(--gym-purple)), rgb(var(--gym-pink)));
+    --gym-gradient-diagonal: linear-gradient(135deg, rgb(var(--gym-purple)), rgb(var(--gym-pink)));
+    --gym-gradient-card: linear-gradient(145deg, rgba(var(--gym-purple), 0.1), rgba(var(--gym-pink), 0.1));
+    
+    /* Sombras neón */
+    --gym-shadow-purple: 0 0 20px rgba(var(--gym-purple), 0.5);
+    --gym-shadow-cyan: 0 0 20px rgba(var(--gym-cyan), 0.5);
+    --gym-shadow-pink: 0 0 20px rgba(var(--gym-pink), 0.5);
+  }
+
+  .dark {
+    /* GymTiva Color Palette - Modo Oscuro */
+    --background: var(--gym-black);
+    --foreground: var(--gym-white);
+    --card: var(--gym-gray-dark);
+    --card-foreground: var(--gym-white);
+    --popover: var(--gym-gray-dark);
+    --popover-foreground: var(--gym-white);
+    --primary: var(--gym-purple);
+    --primary-foreground: var(--gym-white);
+    --secondary: var(--gym-gray-dark);
+    --secondary-foreground: var(--gym-gray-light);
+    --muted: var(--gym-gray-medium);
+    --muted-foreground: var(--gym-gray-light);
+    --accent: var(--gym-cyan);
+    --accent-foreground: var(--gym-black);
+    --destructive: 239 68 68;
+    --destructive-foreground: var(--gym-white);
+    --border: var(--gym-gray-medium);
+    --input: var(--gym-gray-dark);
+    --ring: var(--gym-cyan);
+    
+    /* Gradientes en modo oscuro */
+    --gym-gradient-card: linear-gradient(145deg, rgba(var(--gym-purple), 0.2), rgba(var(--gym-pink), 0.2));
+  }
+  
+  /* Clases de utilidad personalizadas para GymTiva */
+  .gym-gradient-primary {
+    background: var(--gym-gradient-primary);
+  }
+  
+  .gym-gradient-diagonal {
+    background: var(--gym-gradient-diagonal);
+  }
+  
+  .gym-gradient-card {
+    background: var(--gym-gradient-card);
+  }
+  
+  .gym-shadow-purple {
+    box-shadow: var(--gym-shadow-purple);
+  }
+  
+  .gym-shadow-cyan {
+    box-shadow: var(--gym-shadow-cyan);
+  }
+  
+  .gym-shadow-pink {
+    box-shadow: var(--gym-shadow-pink);
+  }
+  
+  .gym-text-gradient {
+    background: var(--gym-gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .gym-border-gradient {
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    background-image: var(--gym-gradient-primary);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
