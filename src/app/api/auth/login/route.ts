@@ -8,10 +8,29 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 
 export async function POST(request: NextRequest) {
   try {
-    await connectDB();
+    console.log('🔐 Iniciando proceso de login...');
+    
+    // Conectar a la base de datos con timeout
+    const dbConnectPromise = connectDB();
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Database connection timeout')), 15000)
+    );
+    
+    try {
+      await Promise.race([dbConnectPromise, timeoutPromise]);
+      console.log('✅ Conexión a DB establecida');
+    } catch (dbError) {
+      console.error('❌ Error de conexión a DB:', dbError);
+      return NextResponse.json(
+        { error: 'Error de conexión al servidor. Por favor intenta nuevamente.' },
+        { status: 503 }
+      );
+    }
 
     const body = await request.json();
     const { email, password } = body;
+
+    console.log('📧 Intentando login para:', email);
 
     // Validaciones básicas
     if (!email || !password) {
@@ -22,6 +41,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Buscar usuario por email
+    console.log('🔍 Buscando usuario en DB...');
     const user = await User.findOne({ email: email.toLowerCase().trim() });
     if (!user) {
       console.log('👤 Login: Usuario no encontrado para email:', email);
@@ -115,9 +135,28 @@ export async function POST(request: NextRequest) {
     return response;
 
   } catch (error) {
-    console.error('Error en login:', error);
+    console.error('❌ Error en login:', error);
+    
+    // Verificar si es un error de timeout de MongoDB
+    if (error instanceof Error) {
+      if (error.message.includes('buffering timed out') || 
+          error.message.includes('Database connection timeout')) {
+        return NextResponse.json(
+          { error: 'No se pudo conectar a la base de datos. Por favor verifica tu conexión a internet e intenta nuevamente.' },
+          { status: 503 }
+        );
+      }
+      
+      if (error.message.includes('ENOTFOUND') || error.message.includes('ETIMEDOUT')) {
+        return NextResponse.json(
+          { error: 'Error de red. Verifica tu conexión a internet.' },
+          { status: 503 }
+        );
+      }
+    }
+    
     return NextResponse.json(
-      { error: 'Error interno del servidor' },
+      { error: 'Error interno del servidor. Por favor intenta nuevamente.' },
       { status: 500 }
     );
   }

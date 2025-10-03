@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface User {
   id: string;
@@ -14,16 +15,24 @@ interface User {
   };
 }
 
-export default function WelcomeHeader() {
-  const [user, setUser] = useState<User | null>(null);
+interface WelcomeHeaderProps {
+  user?: User | null;
+}
+
+export default function WelcomeHeader({ user: propUser }: WelcomeHeaderProps = {}) {
+  const [user, setUser] = useState<User | null>(propUser || null);
 
   useEffect(() => {
-    // Obtener datos del usuario desde localStorage
-    const userData = localStorage.getItem('user-data');
-    if (userData) {
-      setUser(JSON.parse(userData));
+    // Si se pasa user como prop, usarlo, sino obtenerlo de localStorage
+    if (propUser) {
+      setUser(propUser);
+    } else {
+      const userData = localStorage.getItem('user-data');
+      if (userData) {
+        setUser(JSON.parse(userData));
+      }
     }
-  }, []);
+  }, [propUser]);
 
   // Obtener saludo basado en la hora
   const getGreeting = () => {
@@ -41,7 +50,15 @@ export default function WelcomeHeader() {
   return (
     <div className="flex items-center justify-between mb-8">
       <div className="flex items-center">
-        <div className="text-4xl mr-4">🏋️‍♂️</div>
+        <div className="w-12 h-12 mr-4 flex items-center justify-center">
+          <Image 
+            src="/images/GymTiva.png" 
+            alt="GymTiva Logo" 
+            width={48} 
+            height={48}
+            className="object-contain"
+          />
+        </div>
         <div>
           <h1 className="text-2xl font-bold text-white">
             {getGreeting()}{user ? `, ${getFirstName(user.name)}` : ''}

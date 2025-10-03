@@ -51,7 +51,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   try {
     await connectDB();
 
-    const { dayCompleted, exerciseCompleted, cardioCompleted } = await request.json();
+    const { dayCompleted } = await request.json();
     
     // Obtener token del usuario
     const token = request.headers.get('cookie')?.split('token=')[1]?.split(';')[0];
@@ -87,9 +87,9 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       
       // Solo marcar como completado si es un día de entrenamiento (lunes a viernes)
       if (currentDayOfWeek <= 5) {
-        const currentWeek = workout.weeks.find((w: any) => w.weekNumber === workout.currentWeek);
+        const currentWeek = workout.weeks.find((w: { weekNumber: number }) => w.weekNumber === workout.currentWeek);
         if (currentWeek) {
-          const currentDay = currentWeek.days.find((d: any) => d.dayNumber === currentDayOfWeek);
+          const currentDay = currentWeek.days.find((d: { dayNumber: number }) => d.dayNumber === currentDayOfWeek);
           if (currentDay) {
             currentDay.completed = dayCompleted;
             currentDay.completedAt = dayCompleted ? new Date() : undefined;

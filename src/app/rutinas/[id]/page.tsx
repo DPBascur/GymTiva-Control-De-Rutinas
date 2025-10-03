@@ -164,7 +164,15 @@ export default function WorkoutSessionPage() {
             </div>
           </div>
 
-          {todayExercises.map((exercise, index) => {
+          {todayExercises.map((exercise: { 
+            name: string; 
+            exerciseName?: string;
+            sets: number; 
+            reps: string; 
+            muscleGroup: string; 
+            instructions?: string;
+            restTime?: number;
+          }, index: number) => {
             const isCompleted = completedExercises.has(index);
             
             return (

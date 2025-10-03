@@ -1,9 +1,7 @@
-import { NextResponse } from 'next/server';
-import { connectDB } from '@/lib/mongodb';
+import { NextRequest, NextResponse } from 'next/server';
+import { connectDB as dbConnect } from '@/lib/mongodb';
 import { Workout } from '@/models/Workout';
-import { User } from '@/models/User';
-import { createExoticoTraMaxWorkout } from '@/lib/exoticoTramax';
-import jwt from 'jsonwebtoken';
+import { Exercise } from '@/models/Exercise';
 
 // GET - Obtener rutinas del usuario
 export async function GET(request: NextRequest) {

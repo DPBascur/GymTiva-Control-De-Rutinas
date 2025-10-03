@@ -64,7 +64,10 @@ export default function EjerciciosPage() {
       const response = await fetch('/api/exercises');
       if (!response.ok) throw new Error('Error al cargar ejercicios');
       const data = await response.json();
-      setExercises(data);
+      
+      // Asegurarse de que data sea un array
+      const exercisesArray = Array.isArray(data) ? data : (data.exercises || []);
+      setExercises(exercisesArray);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error desconocido');
     } finally {
@@ -75,17 +78,18 @@ export default function EjerciciosPage() {
   const getMuscleGroupStats = () => {
     const stats = muscleGroups.slice(1).map(group => ({
       ...group,
-      count: exercises.filter(ex => ex.muscleGroup === group.key).length
+      count: Array.isArray(exercises) ? exercises.filter(ex => ex.muscleGroup === group.key).length : 0
     }));
     return stats;
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gym-purple via-gym-pink to-gym-cyan flex items-center justify-center">
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white text-lg">Cargando ejercicios...</p>
+      <div className="min-h-screen bg-exotico pb-20 flex items-center justify-center">
+        <div className="bg-gray-800/50 backdrop-blur-lg rounded-3xl p-8 text-center border border-gray-700/50">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-500 mx-auto mb-4"></div>
+          <p className="text-white text-lg mb-2">Cargando ejercicios...</p>
+          <p className="text-gray-400 text-sm">Preparando base de datos de ejercicios</p>
         </div>
       </div>
     );
@@ -93,8 +97,8 @@ export default function EjerciciosPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gym-purple via-gym-pink to-gym-cyan flex items-center justify-center">
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center">
+      <div className="min-h-screen bg-exotico pb-20 flex items-center justify-center">
+        <div className="bg-gray-800/50 backdrop-blur-lg rounded-3xl p-8 text-center border border-gray-700/50">
           <div className="text-red-400 text-6xl mb-4">⚠️</div>
           <h2 className="text-white text-xl font-bold mb-2">Error</h2>
           <p className="text-white/80">{error}</p>

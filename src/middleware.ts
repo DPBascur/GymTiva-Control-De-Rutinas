@@ -9,17 +9,16 @@ const publicRoutes = [
   '/auth/forgot-password'
 ];
 
-// Rutas de API públicas
-const publicApiRoutes = [
-  '/api/auth',
-  '/api/auth/login',
-  '/api/auth/register'
-];
-
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
   console.log(`🔐 Middleware: Verificando ruta ${pathname}`);
+  
+  // IMPORTANTE: Permitir TODAS las rutas API sin restricción
+  if (pathname.startsWith('/api')) {
+    console.log(`✅ Middleware: Permitiendo ruta API ${pathname}`);
+    return NextResponse.next();
+  }
   
   // Permitir acceso a archivos estáticos
   if (
@@ -30,11 +29,6 @@ export function middleware(request: NextRequest) {
     pathname.startsWith('/logos') ||
     pathname.includes('.') // archivos con extensión
   ) {
-    return NextResponse.next();
-  }
-
-  // Permitir API routes públicas
-  if (publicApiRoutes.some(route => pathname.startsWith(route))) {
     return NextResponse.next();
   }
 

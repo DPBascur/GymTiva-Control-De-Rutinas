@@ -27,19 +27,32 @@ export default function LoginPage() {
     setError('');
 
     try {
+      console.log('🔐 Enviando petición de login...');
+      
       // Llamar a la API de login
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
           email: formData.email,
           password: formData.password
         }),
       });
 
+      console.log('📥 Respuesta recibida:', response.status, response.statusText);
+
+      // Verificar si la respuesta es JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        console.error('❌ Respuesta no es JSON:', contentType);
+        throw new Error('Error de servidor. La respuesta no es válida.');
+      }
+
       const data = await response.json();
+      console.log('📦 Datos recibidos:', data);
 
       if (!response.ok) {
         throw new Error(data.error || 'Error al iniciar sesión');
@@ -49,17 +62,13 @@ export default function LoginPage() {
       localStorage.setItem('auth-token', data.token);
       localStorage.setItem('user-data', JSON.stringify(data.user));
       
-      // Configurar cookie para middleware con configuración más robusta
-      document.cookie = `auth-token=${data.token}; path=/; max-age=604800; SameSite=Lax`;
-      
-      // Pequeña pausa para asegurar que la cookie se establezca
-      await new Promise(resolve => setTimeout(resolve, 100));
+      console.log('✅ Login exitoso, redirigiendo...');
       
       // Redirigir al home
       window.location.href = '/';
       
     } catch (err) {
-      console.error('Error en login:', err);
+      console.error('❌ Error en login:', err);
       setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
     } finally {
       setIsLoading(false);

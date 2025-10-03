@@ -77,14 +77,14 @@ WorkoutSchema.virtual('progressPercentage').get(function() {
   return Math.round((this.completedWorkouts / this.totalWorkouts) * 100);
 });
 
-WorkoutSchema.virtual('currentWeekData').get(function() {
-  return this.weeks.find(week => week.weekNumber === this.currentWeek);
+WorkoutSchema.virtual('currentWeekData').get(function(this: any) {
+  return this.weeks.find((week: { weekNumber: number }) => week.weekNumber === this.currentWeek);
 });
 
-WorkoutSchema.virtual('currentDayData').get(function() {
-  const currentWeek = this.currentWeekData;
+WorkoutSchema.virtual('currentDayData').get(function(this: any) {
+  const currentWeek = this.weeks.find((week: { weekNumber: number }) => week.weekNumber === this.currentWeek);
   if (!currentWeek) return null;
-  return currentWeek.days.find(day => day.dayNumber === this.currentDay);
+  return currentWeek.days.find((day: { dayNumber: number }) => day.dayNumber === this.currentDay);
 });
 
 // Middleware para calcular totalWorkouts

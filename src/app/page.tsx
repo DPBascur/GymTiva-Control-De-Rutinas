@@ -6,7 +6,7 @@ import BottomNavbar from '@/components/BottomNavbar';
 import { useWorkout } from '@/contexts/WorkoutContext';
 
 export default function Home() {
-  const { todayProgress, weeklyProgress, workoutStats, activeWorkout, isLoading } = useWorkout();
+  const { todayProgress, workoutStats, activeWorkout, isLoading } = useWorkout();
 
   // Obtener el día de la semana actual
   const getDayName = () => {

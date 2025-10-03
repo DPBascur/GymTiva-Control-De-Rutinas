@@ -18,13 +18,65 @@ interface User {
 
 export default function PerfilPage() {
   const [user, setUser] = useState<User | null>(null);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [formData, setFormData] = useState({
+    age: 0,
+    weight: 0,
+    height: 0
+  });
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
+    // Cargar desde localStorage primero (rápido)
     const userData = localStorage.getItem('user-data');
     if (userData) {
-      setUser(JSON.parse(userData));
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
+      
+      if (parsedUser.profile) {
+        setFormData({
+          age: parsedUser.profile.age || 0,
+          weight: parsedUser.profile.weight || 0,
+          height: parsedUser.profile.height || 0
+        });
+      }
     }
   }, []);
+
+  const handleSaveProfile = async () => {
+    try {
+      setIsSaving(true);
+      
+      const response = await fetch('/api/user/profile', {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+        setIsEditingProfile(false);
+        
+        // Actualizar localStorage
+        localStorage.setItem('user-data', JSON.stringify(data.user));
+        
+        alert('✅ Perfil actualizado exitosamente');
+      } else {
+        alert('❌ Error al actualizar perfil');
+      }
+    } catch (error) {
+      console.error('Error guardando perfil:', error);
+      alert('❌ Error al actualizar perfil');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleComingSoon = () => {
+    alert('🚧 Próximamente\n\nEsta funcionalidad estará disponible en futuras actualizaciones.');
+  };
 
   const handleLogout = async () => {
     try {
@@ -57,25 +109,86 @@ export default function PerfilPage() {
                 </div>
               </div>
               
-              {user.profile && (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="text-center p-4 bg-gray-700/30 rounded-2xl">
-                    <div className="text-2xl font-bold text-white">{user.profile.age}</div>
-                    <div className="text-gray-400 text-sm">Años</div>
+              {isEditingProfile ? (
+                <div className="space-y-4 pt-6 border-t border-gray-700/50">
+                  <div>
+                    <label className="block text-gray-300 text-sm font-semibold mb-2">Edad (años)</label>
+                    <input
+                      type="number"
+                      value={formData.age}
+                      onChange={(e) => setFormData({ ...formData, age: Number(e.target.value) })}
+                      className="w-full bg-gray-700/50 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="Ej: 25"
+                      min="1"
+                      max="120"
+                    />
                   </div>
-                  <div className="text-center p-4 bg-gray-700/30 rounded-2xl">
-                    <div className="text-2xl font-bold text-white">{user.profile.weight}</div>
-                    <div className="text-gray-400 text-sm">kg</div>
+                  
+                  <div>
+                    <label className="block text-gray-300 text-sm font-semibold mb-2">Peso (kg)</label>
+                    <input
+                      type="number"
+                      value={formData.weight}
+                      onChange={(e) => setFormData({ ...formData, weight: Number(e.target.value) })}
+                      className="w-full bg-gray-700/50 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="Ej: 70"
+                      min="1"
+                      max="300"
+                      step="0.1"
+                    />
                   </div>
-                  <div className="text-center p-4 bg-gray-700/30 rounded-2xl">
-                    <div className="text-2xl font-bold text-white">{user.profile.height}</div>
-                    <div className="text-gray-400 text-sm">cm</div>
+                  
+                  <div>
+                    <label className="block text-gray-300 text-sm font-semibold mb-2">Altura (cm)</label>
+                    <input
+                      type="number"
+                      value={formData.height}
+                      onChange={(e) => setFormData({ ...formData, height: Number(e.target.value) })}
+                      className="w-full bg-gray-700/50 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="Ej: 175"
+                      min="50"
+                      max="250"
+                    />
                   </div>
-                  <div className="text-center p-4 bg-gray-700/30 rounded-2xl">
-                    <div className="text-2xl font-bold text-white">{user.profile.bmi}</div>
-                    <div className="text-gray-400 text-sm">IMC</div>
+
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      onClick={handleSaveProfile}
+                      disabled={isSaving}
+                      className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 rounded-xl hover:opacity-90 transition-all disabled:opacity-50"
+                    >
+                      {isSaving ? 'Guardando...' : '✓ Guardar Cambios'}
+                    </button>
+                    <button
+                      onClick={() => setIsEditingProfile(false)}
+                      disabled={isSaving}
+                      className="flex-1 bg-gray-700/50 text-white font-bold py-3 rounded-xl hover:bg-gray-600/50 transition-all disabled:opacity-50"
+                    >
+                      ✕ Cancelar
+                    </button>
                   </div>
                 </div>
+              ) : (
+                user.profile && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-gray-700/50">
+                    <div className="text-center p-4 bg-gray-700/30 rounded-2xl">
+                      <div className="text-2xl font-bold text-white">{user.profile.age}</div>
+                      <div className="text-gray-400 text-sm">Años</div>
+                    </div>
+                    <div className="text-center p-4 bg-gray-700/30 rounded-2xl">
+                      <div className="text-2xl font-bold text-white">{user.profile.weight}</div>
+                      <div className="text-gray-400 text-sm">kg</div>
+                    </div>
+                    <div className="text-center p-4 bg-gray-700/30 rounded-2xl">
+                      <div className="text-2xl font-bold text-white">{user.profile.height}</div>
+                      <div className="text-gray-400 text-sm">cm</div>
+                    </div>
+                    <div className="text-center p-4 bg-gray-700/30 rounded-2xl">
+                      <div className="text-2xl font-bold text-white">{user.profile.bmi.toFixed(1)}</div>
+                      <div className="text-gray-400 text-sm">IMC</div>
+                    </div>
+                  </div>
+                )
               )}
             </div>
 
@@ -84,7 +197,10 @@ export default function PerfilPage() {
               <h3 className="text-xl font-bold text-white mb-4">Configuración</h3>
               
               <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl border border-gray-700/50">
-                <button className="w-full p-4 text-left text-white hover:bg-gray-700/30 transition-all rounded-2xl">
+                <button 
+                  onClick={() => setIsEditingProfile(true)}
+                  className="w-full p-4 text-left text-white hover:bg-gray-700/30 transition-all rounded-2xl"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,24 +216,10 @@ export default function PerfilPage() {
               </div>
 
               <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl border border-gray-700/50">
-                <button className="w-full p-4 text-left text-white hover:bg-gray-700/30 transition-all rounded-2xl">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      <span>Configuración</span>
-                    </div>
-                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </button>
-              </div>
-
-              <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl border border-gray-700/50">
-                <button className="w-full p-4 text-left text-white hover:bg-gray-700/30 transition-all rounded-2xl">
+                <button 
+                  onClick={handleComingSoon}
+                  className="w-full p-4 text-left text-white hover:bg-gray-700/30 transition-all rounded-2xl"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

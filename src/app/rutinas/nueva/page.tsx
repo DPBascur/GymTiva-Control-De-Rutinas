@@ -12,7 +12,7 @@ export default function NuevaRutinaPage() {
     {
       id: 'exotico-tramax',
       title: 'Rutina ExoticoTramax',
-      subtitle: 'Rutina profesional diseñada por expertos',
+      subtitle: 'Rutina diseñada por un exótico máximo que le da al fallo todos los días',
       description: 'Una rutina completa y balanceada que incluye ejercicios para todos los grupos musculares. Perfecta para principiantes y experimentados.',
       icon: '🔥',
       gradient: 'from-gym-purple via-gym-pink to-gym-cyan',
