@@ -9,7 +9,7 @@ export async function GET() {
 
     console.log('🔍 Buscando ejercicios...');
     
-    let exercises = [];
+    let exercises: any[] = [];
     
     try {
       // Primer intento con timeout extendido
