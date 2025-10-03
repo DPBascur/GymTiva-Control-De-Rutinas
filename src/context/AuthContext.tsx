@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Redirigir al dashboard
       window.location.href = '/rutinas';
       
-    } catch (error) {
+    } catch (_error) {
       throw new Error('Error al iniciar sesión');
     } finally {
       setIsLoading(false);
@@ -109,7 +109,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Redirigir al dashboard
       window.location.href = '/rutinas';
       
-    } catch (error) {
+    } catch (_error) {
       throw new Error('Error al registrar usuario');
     } finally {
       setIsLoading(false);

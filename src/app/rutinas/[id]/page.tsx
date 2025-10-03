@@ -165,11 +165,11 @@ export default function WorkoutSessionPage() {
           </div>
 
           {todayExercises.map((exercise: { 
-            name: string; 
+            name?: string; 
             exerciseName?: string;
             sets: number; 
-            reps: string; 
-            muscleGroup: string; 
+            reps: string | number; 
+            muscleGroup?: string; 
             instructions?: string;
             restTime?: number;
           }, index: number) => {

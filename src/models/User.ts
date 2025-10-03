@@ -42,7 +42,7 @@ const UserSchema = new mongoose.Schema({
     },
     bmi: {
       type: Number,
-      default: function() {
+      default: function(this: any) {
         return Number((this.weight / Math.pow(this.height / 100, 2)).toFixed(1));
       }
     }
@@ -65,8 +65,8 @@ const UserSchema = new mongoose.Schema({
 }, {
   timestamps: true,
   toJSON: {
-    transform: function(doc, ret) {
-      delete ret.password;
+    transform: function(_doc: any, ret: any) {
+      delete (ret as any).password;
       return ret;
     }
   }
