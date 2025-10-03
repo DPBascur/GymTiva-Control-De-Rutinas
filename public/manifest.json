@@ -1,0 +1,40 @@
+{
+  "name": "GymTiva - Control de Rutinas",
+  "short_name": "GymTiva",
+  "description": "Controla tus rutinas de gimnasio, registra tu nutrición y monitorea tu progreso fitness con GymTiva.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#9333EA",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "es",
+  "categories": ["fitness", "health", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/GymTiva.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/icons/GymTiva.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Nueva Rutina",
+      "short_name": "Rutina", 
+      "description": "Crear una nueva rutina de entrenamiento",
+      "url": "/rutinas/nueva"
+    },
+    {
+      "name": "Ver Ejercicios",
+      "short_name": "Ejercicios",
+      "description": "Explorar biblioteca de ejercicios", 
+      "url": "/rutinas/ejercicios"
+    }
+  ]
+}

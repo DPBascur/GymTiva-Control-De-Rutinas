@@ -47,6 +47,7 @@
     --gym-gradient-primary: linear-gradient(to right, rgb(var(--gym-purple)), rgb(var(--gym-pink)));
     --gym-gradient-diagonal: linear-gradient(135deg, rgb(var(--gym-purple)), rgb(var(--gym-pink)));
     --gym-gradient-card: linear-gradient(145deg, rgba(var(--gym-purple), 0.1), rgba(var(--gym-pink), 0.1));
+    --gym-gradient-exotico: linear-gradient(135deg, #0F0E13 0%, #0B0B10 50%, #0D0C11 100%);
     
     /* Sombras neón */
     --gym-shadow-purple: 0 0 20px rgba(var(--gym-purple), 0.5);
@@ -91,6 +92,10 @@
   
   .gym-gradient-card {
     background: var(--gym-gradient-card);
+  }
+  
+  .bg-exotico {
+    background: var(--gym-gradient-exotico);
   }
   
   .gym-shadow-purple {

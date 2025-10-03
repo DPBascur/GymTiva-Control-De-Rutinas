@@ -7,7 +7,25 @@ export async function GET() {
   try {
     await dbConnect();
 
-    const exercises = await Exercise.find().sort({ name: 1 });
+    console.log('🔍 Buscando ejercicios...');
+    
+    let exercises = [];
+    
+    try {
+      // Primer intento con timeout extendido
+      exercises = await Exercise.find()
+        .sort({ name: 1 })
+        .maxTimeMS(45000)
+        .lean()
+        .exec();
+      
+      console.log('✅ Ejercicios encontrados:', exercises.length);
+    } catch (findError) {
+      console.log('⚠️ Error al buscar ejercicios, devolviendo array vacío...', findError instanceof Error ? findError.message : 'Error desconocido');
+      
+      // Si falla, devolver array vacío en lugar de error
+      exercises = [];
+    }
 
     return NextResponse.json({ exercises });
   } catch (error) {
