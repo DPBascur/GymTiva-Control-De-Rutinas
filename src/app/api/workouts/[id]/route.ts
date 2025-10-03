@@ -3,9 +3,11 @@ import { connectDB } from '@/lib/mongodb';
 import { Workout } from '@/models/Workout';
 import jwt from 'jsonwebtoken';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
+    
+    const params = await context.params;
 
     // Obtener token del usuario
     const token = request.headers.get('cookie')?.split('token=')[1]?.split(';')[0];
@@ -47,9 +49,11 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, context: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
+    
+    const params = await context.params;
 
     const { dayCompleted } = await request.json();
     
