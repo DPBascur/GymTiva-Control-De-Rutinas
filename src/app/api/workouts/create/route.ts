@@ -159,10 +159,10 @@ export async function GET(request: Request) {
         isPaused: workout.isPaused,
         startDate: workout.startDate,
         lastWorkoutDate: workout.lastWorkoutDate,
-        weeks: workout.weeks ? workout.weeks.map(week => ({
+        weeks: workout.weeks ? workout.weeks.map((week: any) => ({
           weekNumber: week.weekNumber,
           completed: week.completed,
-          days: week.days ? week.days.map(day => ({
+          days: week.days ? week.days.map((day: any) => ({
             dayName: day.dayName,
             dayNumber: day.dayNumber,
             muscleGroups: day.muscleGroups,
