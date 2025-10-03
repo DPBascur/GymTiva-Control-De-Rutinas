@@ -29,15 +29,9 @@ export default function Header() {
   }, []);
 
   const handleLogout = async () => {
-    setIsLoggingOut(true);
-    
     try {
-      // Llamar a la API de logout
-      const response = await fetch('/api/auth/logout', {
+      await fetch('/api/auth/logout', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
       });
 
       // Limpiar localStorage independientemente de la respuesta

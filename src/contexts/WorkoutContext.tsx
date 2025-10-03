@@ -43,7 +43,21 @@ interface WorkoutType {
 
 interface WorkoutContextType {
   activeWorkout: WorkoutType | null;
-  currentDayWorkout: any;
+  currentDayWorkout: {
+    dayNumber: number;
+    dayName: string;
+    exercises: Array<{
+      name: string;
+      sets: number;
+      reps: string;
+      muscleGroup: string;
+    }>;
+    cardio?: {
+      type: string;
+      duration: string | number;
+    };
+    completed: boolean;
+  } | null;
   todayProgress: {
     hasWorkout: boolean;
     isRestDay: boolean;
@@ -52,7 +66,12 @@ interface WorkoutContextType {
     exercisesCount: number;
     completed: boolean;
     dayNumber: number;
-    exercises?: Array<any>;
+    exercises?: Array<{
+      name: string;
+      sets: number;
+      reps: string;
+      muscleGroup: string;
+    }>;
     cardio?: {
       type: string;
       duration: string | number;
