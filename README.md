@@ -5,16 +5,29 @@
 ## 📱 Screenshots de la Aplicación
 
 ### 🏠 Dashboard Principal
+El dashboard muestra tu progreso diario, estadísticas de la semana y acceso rápido a tu rutina activa.
 
+![Dashboard Principal](images/home.png)
 
-### 🏋️‍♂️ Rutina ExoticoTramax
+### 💪 Gestión de Rutinas
+Visualiza y administra todas tus rutinas de entrenamiento con información detallada de progreso.
 
+![Gestión de Rutinas](images/rutinas.png)
+
+### 🏋️‍♂️ Sesión de Entrenamiento
+Interfaz intuitiva para marcar ejercicios completados con cronómetro en tiempo real.
+
+![Sesión de Entrenamiento](images/entrenamiento.png)
 
 ### 📊 Página de Progreso
+Seguimiento visual de tu rendimiento semanal y estadísticas de calorías quemadas.
 
-### 💪 Sesión de Entrenamiento
+![Página de Progreso](images/progreso.png)
 
-### � Gestión de Rutinas
+### 👤 Perfil de Usuario
+Gestiona tu información personal y configuración de la aplicación.
+
+![Perfil de Usuario](images/perfil.png)
 
 ---
 
