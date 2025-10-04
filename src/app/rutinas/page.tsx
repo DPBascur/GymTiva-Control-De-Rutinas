@@ -96,7 +96,6 @@ export default function RutinasPage() {
       
       // Obtener datos del usuario del localStorage
       const userData = localStorage.getItem('user-data');
-      console.log('📋 Datos de usuario en localStorage:', userData);
       
       if (!userData) {
         throw new Error('Usuario no encontrado. Por favor, inicia sesión de nuevo.');

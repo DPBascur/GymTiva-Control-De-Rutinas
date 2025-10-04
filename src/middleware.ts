@@ -59,9 +59,8 @@ export function middleware(request: NextRequest) {
         // Token mal formado
         isAuthenticated = false;
       }
-    } catch (error) {
+    } catch (_error) {
       // Token inválido
-      console.log('Token inválido o expirado:', error);
       isAuthenticated = false;
       
       // Limpiar cookie inválida solo si no estamos en ruta pública

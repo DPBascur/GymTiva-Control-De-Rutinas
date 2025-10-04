@@ -109,14 +109,12 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
 
     await workout.save();
 
+    // Obtener la rutina completa actualizada
+    const updatedWorkout = await Workout.findById(workout._id).lean();
+
     return NextResponse.json({
       success: true,
-      workout: {
-        _id: workout._id,
-        currentWeek: workout.currentWeek,
-        currentDay: workout.currentDay,
-        progressPercentage: workout.progressPercentage
-      }
+      workout: updatedWorkout
     });
 
   } catch (error) {

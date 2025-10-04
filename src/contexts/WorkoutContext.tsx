@@ -362,10 +362,18 @@ export function WorkoutProvider({ children }: WorkoutProviderProps) {
       });
 
       if (response.ok) {
+        const data = await response.json();
         console.log('✅ Entrenamiento completado exitosamente');
-        await fetchActiveWorkout(); // Recargar datos para reflejar el progreso
+        console.log('🔄 Datos actualizados:', data);
+        
+        if (data.success && data.workout) {
+          setActiveWorkout(data.workout);
+          console.log('✅ Estado actualizado con nueva data');
+        }
       } else {
         console.error('❌ Error en respuesta de la API');
+        const errorData = await response.json();
+        console.error('❌ Detalles:', errorData);
       }
     } catch (error) {
       console.error('❌ Error completando entrenamiento:', error);

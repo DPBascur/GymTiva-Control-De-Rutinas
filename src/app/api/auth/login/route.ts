@@ -44,7 +44,6 @@ export async function POST(request: NextRequest) {
     console.log('🔍 Buscando usuario en DB...');
     const user = await User.findOne({ email: email.toLowerCase().trim() });
     if (!user) {
-      console.log('👤 Login: Usuario no encontrado para email:', email);
       return NextResponse.json(
         { error: 'Credenciales inválidas' },
         { status: 401 }
@@ -67,7 +66,6 @@ export async function POST(request: NextRequest) {
     // Verificar contraseña
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      console.log('👤 Login: Contraseña inválida para:', email);
       return NextResponse.json(
         { error: 'Credenciales inválidas' },
         { status: 401 }
@@ -75,8 +73,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verificar si el usuario está activo (ahora manejando undefined correctamente)
-    if (user.isActive === false) {
-      console.log('👤 Login: Usuario desactivado:', email, 'isActive:', user.isActive);
+    if (!user.isActive) {
       return NextResponse.json(
         { error: 'Cuenta desactivada. Contacta al soporte' },
         { status: 403 }

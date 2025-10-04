@@ -19,7 +19,6 @@ export async function GET(request: NextRequest) {
     });
 
     if (!userId) {
-      console.log('❌ API Workouts: userId no encontrado en parámetros');
       return NextResponse.json({ error: 'Usuario requerido' }, { status: 400 });
     }
 
@@ -39,8 +38,6 @@ export async function GET(request: NextRequest) {
       query.date = { $gte: startDate, $lt: endDate };
     }
 
-    console.log('🔍 Buscando workouts para usuario:', userId);
-    
     let workouts: Array<Record<string, unknown>> = [];
     
     try {
@@ -131,7 +128,6 @@ export async function POST(request: NextRequest) {
 
     // Verificar si es la primera rutina del usuario
     const userWorkoutCount = await Workout.countDocuments({ userId });
-    console.log(`👤 Usuario ${userId} tiene ${userWorkoutCount} rutinas después de crear nueva`);
 
     return NextResponse.json({ 
       workout, 

@@ -95,7 +95,6 @@ export async function POST(request: NextRequest) {
     }
     
     if (existingUser) {
-      console.log('⚠️ Usuario ya existe:', email);
       return NextResponse.json(
         { error: 'El usuario ya existe con ese email' },
         { status: 400 }
