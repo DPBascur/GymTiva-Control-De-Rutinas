@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, ReactNode } from 'react';
 
 interface WorkoutType {
   _id: string;
@@ -174,7 +174,7 @@ export function WorkoutProvider({ children }: WorkoutProviderProps) {
   };
 
   // Calcular progreso del día actual
-  const getCurrentDayWorkout = () => {
+  const getCurrentDayWorkout = useCallback(() => {
     if (!activeWorkout) {
       console.log('❌ No hay rutina activa');
       return null;
@@ -230,10 +230,10 @@ export function WorkoutProvider({ children }: WorkoutProviderProps) {
       cardio: currentDay.cardio,
       exercises: currentDay.exercises || []
     };
-  };
+  }, [activeWorkout]);
 
   // Calcular progreso semanal basado en datos reales
-  const getWeeklyProgress = () => {
+  const getWeeklyProgress = useCallback(() => {
     const today = new Date();
     const weekProgress = [];
     
@@ -284,10 +284,10 @@ export function WorkoutProvider({ children }: WorkoutProviderProps) {
     }
     
     return weekProgress;
-  };
+  }, [activeWorkout]);
 
   // Calcular estadísticas
-  const getWorkoutStats = () => {
+  const getWorkoutStats = useCallback(() => {
     if (!activeWorkout) {
       return {
         totalWorkouts: 0,
@@ -347,7 +347,7 @@ export function WorkoutProvider({ children }: WorkoutProviderProps) {
       currentStreak: currentStreak,
       weekProgress: workoutDaysThisWeek.length > 0 ? Math.round((completedThisWeek.length / workoutDaysThisWeek.length) * 100) : 0
     };
-  };
+  }, [activeWorkout, getWeeklyProgress]);
 
   // Completar entrenamiento del día actual
   const completeWorkout = async (workoutId: string) => {
@@ -378,9 +378,10 @@ export function WorkoutProvider({ children }: WorkoutProviderProps) {
     fetchActiveWorkout();
   }, []);
 
-  const currentDayWorkout = getCurrentDayWorkout();
-  const weeklyProgress = getWeeklyProgress();
-  const workoutStats = getWorkoutStats();
+  // Recalcular datos cuando activeWorkout cambie
+  const currentDayWorkout = useMemo(() => getCurrentDayWorkout(), [getCurrentDayWorkout]);
+  const weeklyProgress = useMemo(() => getWeeklyProgress(), [getWeeklyProgress]);
+  const workoutStats = useMemo(() => getWorkoutStats(), [getWorkoutStats]);
 
   const value: WorkoutContextType = {
     activeWorkout,
